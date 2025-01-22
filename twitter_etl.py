@@ -5,7 +5,7 @@ import datetime as datetime
 #import s3fs
 
 # Twitter API credentials
-bearer_token = "AAAAAAAAAAAAAAAAAAAAABZKxAEAAAAAlBTG5WclFHjGiRITtx27oagHcLw%3Do8jae04dQ8esqXGgFMRf1aEHOse47bZm2ShocHXjQEX4TAjnN0"
+bearer_token = "bearer_token"
 
 
 # Twitter authentication
@@ -15,7 +15,7 @@ client = tweepy.Client(bearer_token=bearer_token)
 
 #function to handle rate limit and fetch tweets
 
-def fetch_user_tweets(username):
+def fetch_user_tweets(username, bucket_name):
     try:
         user = client.get_user(username=username, user_fields = ['username'])
 
@@ -48,7 +48,7 @@ def fetch_user_tweets(username):
                         tweets_list.append(refined_tweet)
 
                 df = pd.DataFrame(tweets_list)
-                df.to_csv('tweets.csv', index=False)
+                df.to_csv('s3://{bucket_name}/tweets.csv', index=False)
                 print("Dataframe created and saved to csv")
         else:
             print("ERROR : User does not exist or tweets not found")
@@ -59,5 +59,5 @@ def fetch_user_tweets(username):
     except Exception as e:
         print("ERROR : ", e)
 
-fetch_user_tweets("elonmusk")
-            
+
+# with this you have successfully fetched the tweets of a user and saved it to a csv file.         
